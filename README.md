@@ -20,12 +20,12 @@ Just edit openshift-template.yml and fill with your own variables:
 
 Run the stack with these commands:
 
-	`$ export NET_ID=$(openstack network list | awk '/ provider / { print $2 }')`
+`$ export NET_ID=$(openstack network list | awk '/ provider / { print $2 }')`
 
-	`$ openstack stack create -t demo-template.yml --parameter "NetID=$NET_ID" openshift-stack`
+`$ openstack stack create -t demo-template.yml --parameter "NetID=$NET_ID" openshift-stack`
 
-	`$ openstack stack list`
+`$ openstack stack list`
 
-	`$ openstack server list`
+`$ openstack server list`
 
-	`$ openstack stack delete --yes openshift-stack`
+`$ openstack stack delete --yes openshift-stack`

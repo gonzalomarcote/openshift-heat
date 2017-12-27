@@ -10,29 +10,47 @@ resources:
   ocpmaster:
     type: OS::Nova::Server
     properties:
-      image: rhel-atomic-7.4.3
+      name: ocpmaster
+      availability_zone: nova:node2.cbyg.marcote.org
+      image: rhel-7.4
       flavor: medium
       key_name: osdefault
       networks:
       - network: { get_param: NetID }
+      security_groups:
+      - 74400bd4-ad90-47bd-923c-0723d517a228
+      - ssh-external
+      - osmaster
 
   ocpnode1:
     type: OS::Nova::Server
     properties:
-      image: rhel-atomic-7.4.3
+      name: ocpnode1
+      availability_zone: nova:node1.cbyg.marcote.org
+      image: rhel-7.4
       flavor: small
       key_name: osdefault
       networks:
       - network: { get_param: NetID }
+      security_groups:
+      - 74400bd4-ad90-47bd-923c-0723d517a228
+      - ssh-external
+      - osnode
 
   ocpnode2:
     type: OS::Nova::Server
     properties:
-      image: rhel-atomic-7.4.3
+      name: ocpnode2
+      availability_zone: nova:node1.cbyg.marcote.org
+      image: rhel-7.4
       flavor: small
       key_name: osdefault
       networks:
       - network: { get_param: NetID }
+      security_groups:
+      - 74400bd4-ad90-47bd-923c-0723d517a228
+      - ssh-external
+      - osnode
 
 outputs:
   instance_name:

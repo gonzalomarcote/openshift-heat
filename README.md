@@ -22,7 +22,7 @@ Run the stack with these commands:
 
 `$ export NET_ID=$(openstack network list | awk '/ provider / { print $2 }')`
 
-`$ openstack stack create -t demo-template.yml --parameter "NetID=$NET_ID" openshift-stack`
+`$ openstack stack create -t openshift-template.yml --parameter "NetID=$NET_ID" openshift-stack`
 
 `$ openstack stack list`
 

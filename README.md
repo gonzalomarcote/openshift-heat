@@ -22,7 +22,7 @@ Run the stack with these commands (specify AZ if you want to launch in a specifi
 
 `$ export NET_ID=$(openstack network list | awk '/ provider / { print $2 }')`
 
-`$ openstack stack create -t openshift-template.yml --parameter "NetID=$NET_ID" "AZ=nova:node2.cbyg.marcote.org" openshift-stack`
+`$ openstack stack create -t openshift-template.yml --parameter "NetID=$NET_ID" openshift-stack`
 
 `$ openstack stack list`
 

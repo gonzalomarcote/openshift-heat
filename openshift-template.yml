@@ -1,5 +1,5 @@
 heat_template_version: 2015-10-15
-description: Launch a OpenShift cluster with RHEL Atomic image using ``medium`` flavor, ``osdefault`` key, and one provider network.
+description: Launch a OpenShift cluster 3.5 with RHEL7
 
 parameters:
   NetID:
@@ -7,59 +7,73 @@ parameters:
     description: Network ID to use for the instance.
 
 resources:
-  ocpmaster:
+  ose35master:
     type: OS::Nova::Server
     properties:
-      name: ocpmaster
+      name: ose35master
       availability_zone: nova:node2.cbyg.marcote.org
-      image: rhel-7.4
-      flavor: medium
+      image: rhel7lvm
+      flavor: osmaster
       key_name: osdefault
       networks:
-      - network: { get_param: NetID }
+      - network: {get_param: NetID}
       security_groups:
       - 74400bd4-ad90-47bd-923c-0723d517a228
       - ssh-external
       - osmaster
+      personality: {"/root/ose_35.sh": {get_file: "./ose_35.sh"}}
+      user_data:
+        str_replace:
+          template: {get_file: lvm_metadata.sh}
+          params:
+            $FOO: {get_param: NetID}
 
-  ocpnode1:
+  ose35node1:
     type: OS::Nova::Server
     properties:
-      name: ocpnode1
+      name: ose35node1
       availability_zone: nova:node1.cbyg.marcote.org
-      image: rhel-7.4
-      flavor: small
+      image: rhel7lvm
+      flavor: osnode
       key_name: osdefault
       networks:
-      - network: { get_param: NetID }
+      - network: {get_param: NetID}
       security_groups:
       - 74400bd4-ad90-47bd-923c-0723d517a228
       - ssh-external
       - osnode
+      personality: {"/root/ose_35.sh": {get_file: "./ose_35.sh"}}
+      user_data:
+        str_replace:
+          template: {get_file: lvm_metadata.sh}
+          params:
+            $FOO: {get_param: NetID}
 
-  ocpnode2:
+  ose35node2:
     type: OS::Nova::Server
     properties:
-      name: ocpnode2
+      name: ose35node2
       availability_zone: nova:node1.cbyg.marcote.org
-      image: rhel-7.4
-      flavor: small
+      image: rhel7lvm
+      flavor: osnode
       key_name: osdefault
       networks:
-      - network: { get_param: NetID }
+      - network: {get_param: NetID}
       security_groups:
       - 74400bd4-ad90-47bd-923c-0723d517a228
       - ssh-external
       - osnode
+      personality: {"/root/ose_35.sh": {get_file: "./ose_35.sh"}}
+      user_data:
+        str_replace:
+          template: {get_file: lvm_metadata.sh}
+          params:
+            $FOO: {get_param: NetID}
 
 outputs:
   instance_name:
     description: Name of the instance.
-    value: { get_attr: [ ocpmaster, name ] }
-    value: { get_attr: [ ocpnode1, name ] }
-    value: { get_attr: [ ocpnode2, name ] }
+    value: { get_attr: [ ose35master, name ] }
   instance_ip:
     description: IP address of the instance.
-    value: { get_attr: [ ocpmaster, first_address ] }
-    value: { get_attr: [ ocpnode1, first_address ] }
-    value: { get_attr: [ ocpnode2, first_address ] }
+    value: { get_attr: [ ose35master, first_address ] }

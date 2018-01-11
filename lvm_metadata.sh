@@ -13,5 +13,5 @@ EEOF
 partx -u /dev/vda
 pvcreate /dev/vda3
 vgcreate docker-vg /dev/vda3
-lvcreate -n docker-pool -l 100%FREE docker-vg
+#lvcreate -n docker-pool -l 100%FREE docker-vg
 exit 0

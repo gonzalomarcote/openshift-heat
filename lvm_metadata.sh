@@ -1,4 +1,6 @@
 #!/bin/bash
+# This script create the docker-vg LVM volume group at boot needed for docker
+# It is passed as user-data to the instance
 fdisk /dev/vda <<EEOF
 n
 p
@@ -13,5 +15,4 @@ EEOF
 partx -u /dev/vda
 pvcreate /dev/vda3
 vgcreate docker-vg /dev/vda3
-#lvcreate -n docker-pool -l 100%FREE docker-vg
 exit 0

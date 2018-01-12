@@ -1,0 +1,97 @@
+heat_template_version: 2015-10-15
+description: Launch a OpenShift cluster 3.6 with RHEL7
+
+parameters:
+  INSTALL:
+    type: string
+    description: Quick or Advance installation
+
+resources:
+  ose36:
+    type: OS::Nova::Server
+    properties:
+      name: ose36
+      availability_zone: nova:node2.cbyg.marcote.org
+      image: rhel7lvm
+      flavor: osmaster
+      key_name: osdefault
+      networks:
+        - port: ...
+        - port: {get_resource: ose36_port}
+      personality: {/root/ose36.sh: {get_file: "./ose36.sh"}}
+      user_data:
+        str_replace:
+          template: {get_file: lvm_metadata.sh}
+          params:
+            $FOO: {get_param: INSTALL}
+
+  ose36_port:
+    type: OS::Neutron::Port
+    properties:
+      network: selfservice
+      security_groups:
+        - 74400bd4-ad90-47bd-923c-0723.617a228
+        - ssh-external
+        - osmaster
+
+  ose36node1:
+    type: OS::Nova::Server
+    properties:
+      name: ose36node1
+      availability_zone: nova:node1.cbyg.marcote.org
+      image: rhel7lvm
+      flavor: osnode
+      key_name: osdefault
+      networks:
+        - port: ...
+        - port: {get_resource: ose36node1_port}
+      personality: {/root/ose36.sh: {get_file: "./ose36.sh"}}
+      user_data:
+        str_replace:
+          template: {get_file: lvm_metadata.sh}
+          params:
+            $FOO: {get_param: INSTALL}
+
+  ose36node1_port:
+    type: OS::Neutron::Port
+    properties:
+      network: selfservice
+      security_groups:
+        - 74400bd4-ad90-47bd-923c-0723.617a228
+        - ssh-external
+        - osmaster
+
+  ose36node2:
+    type: OS::Nova::Server
+    properties:
+      name: ose36node2
+      availability_zone: nova:node1.cbyg.marcote.org
+      image: rhel7lvm
+      flavor: osnode
+      key_name: osdefault
+      networks:
+      - port: ...
+      - port: {get_resource: ose36node2_port}
+      personality: {/root/ose36.sh: {get_file: "./ose36.sh"}}
+      user_data:
+        str_replace:
+          template: {get_file: lvm_metadata.sh}
+          params:
+            $VOL: docker-vg
+
+  ose36node2_port:
+    type: OS::Neutron::Port
+    properties:
+      network: selfservice
+      security_groups:
+        - 74400bd4-ad90-47bd-923c-0723.617a228
+        - ssh-external
+        - osmaster
+
+outputs:
+  instance_name:
+    description: Name of the instance.
+    value: { get_attr: [ ose36, name ] }
+  instance_ip:
+    description: IP address of the instance.
+    value: { get_attr: [ ose36, first_address ] }

@@ -18,16 +18,16 @@ Just edit openshift-template.yml and fill with your own variables:
 	favor: -> your flavor
 	key_name: -> your ssh key name
 
-Run the stack with these commands (specify AZ if you want to launch in a specific node):
+Run the stack with these commands:
 
 `$ export NET_ID=$(openstack network list | awk '/ provider / { print $2 }')`
 
-`$ openstack stack create -t openshift-template.yml --parameter "NetID=$NET_ID" openshift-stack`
+`$ openstack stack create -t ose3X.template.yml ose3X-stack`
 
 `$ openstack stack list`
 
 `$ openstack server list`
 
-`$ openstack stack output show --all openshift-stack`
+`$ openstack stack output show --all ose3X-stack`
 
-`$ openstack stack delete --yes openshift-stack`
+`$ openstack stack delete --yes ose3X-stack`

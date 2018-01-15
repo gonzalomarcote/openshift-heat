@@ -15,3 +15,6 @@ docker-storage-setup
 lvextend -l +100%FREE docker-vg/docker-pool
 systemctl enable docker
 systemctl start docker
+# Ensuring Host access
+
+

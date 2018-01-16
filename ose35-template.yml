@@ -18,7 +18,8 @@ resources:
       networks:
         - port: 8607db68-20b7-4db5-ab1a-545c346ba9da
         - port: {get_resource: ose35_port}
-      personality: {/home/cloud-user/ose35.sh: {get_file: ose35.sh}}
+      personality: {"/home/cloud-user/ose35.sh": {get_file: "/home/gonzalo/Development/openshift-heat/ose35.sh"}}
+      personality: {"/root/.ssh/id_rsa": {get_file: "/home/gonzalo/.ssh/osdefault"}}
       user_data:
         str_replace:
           template: {get_file: lvm_metadata.sh}
@@ -45,6 +46,7 @@ resources:
       networks:
         - port: f52de966-4085-4289-98ed-af2ab549054c
         - port: {get_resource: ose35node1_port}
+      personality: {"/home/cloud-user/ose35.sh": {get_file: "/home/gonzalo/Development/openshift-heat/ose35.sh"}}
       user_data:
         str_replace:
           template: {get_file: lvm_metadata.sh}
@@ -69,8 +71,9 @@ resources:
       flavor: osnode
       key_name: osdefault
       networks:
-      - port: 0ab1aec8-6518-4e2f-8cb8-34ed2babc02d
-      - port: {get_resource: ose35node2_port}
+        - port: 0ab1aec8-6518-4e2f-8cb8-34ed2babc02d
+        - port: {get_resource: ose35node2_port}
+      personality: {"/home/cloud-user/ose35.sh": {get_file: "/home/gonzalo/Development/openshift-heat/ose35.sh"}}
       user_data:
         str_replace:
           template: {get_file: lvm_metadata.sh}

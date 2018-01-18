@@ -1,0 +1,50 @@
+ansible_callback_facts_yaml: /root/.config/openshift/.ansible/callback_facts.yaml
+ansible_inventory_path: /root/.config/openshift/hosts
+ansible_log_path: /tmp/ansible.log
+deployment:
+  ansible_ssh_user: cloud-user
+  hosts:
+  - connect_to: ose35.marcote.org
+    hostname: ose35.marcote.org
+    ip: 192.168.1.53
+    public_hostname: ose35.marcote.org
+    public_ip: 192.168.1.53
+    roles:
+    - master
+    - etcd
+    - node
+    - storage
+  - connect_to: ose35node1.marcote.org
+    hostname: ose35node1.marcote.org
+    ip: 192.168.1.51
+    node_labels: '{''region'': ''infra''}'
+    public_hostname: ose35node1.marcote.org
+    public_ip: 192.168.1.51
+    roles:
+    - node
+  - connect_to: ose35node2.marcote.org
+    hostname: ose35node2.marcote.org
+    ip: 192.168.1.52
+    node_labels: '{''region'': ''infra''}'
+    public_hostname: ose35node2.marcote.org
+    public_ip: 192.168.1.52
+    roles:
+    - node
+  master_routingconfig_subdomain: ose35apps.marcote.org
+  openshift_master_cluster_hostname: None
+  openshift_master_cluster_public_hostname: None
+  proxy_exclude_hosts: ''
+  proxy_http: ''
+  proxy_https: ''
+  roles:
+    etcd: {}
+    master: {
+      'openshift_docker_insecure_registries' : { '172.30.0.0/16' }
+    }
+    node: {
+      'openshift_docker_insecure_registries' : { '172.30.0.0/16' }
+    }
+    storage: {}
+variant: openshift-enterprise
+variant_version: '3.5'
+version: v2

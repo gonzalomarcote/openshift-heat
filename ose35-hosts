@@ -1,0 +1,35 @@
+
+[OSEv3:children]
+nodes
+nfs
+masters
+etcd
+
+[OSEv3:vars]
+openshift_master_cluster_public_hostname=None
+openshift_master_default_subdomain=ose35apps.marcote.org
+ansible_ssh_user=cloud-user
+openshift_master_cluster_hostname=None
+ansible_become=yes
+openshift_override_hostname_check=true
+deployment_type=openshift-enterprise
+
+[nodes:vars]
+openshift_docker_insecure_registries={'172.30.0.0/16': None}
+
+[masters:vars]
+openshift_docker_insecure_registries={'172.30.0.0/16': None}
+
+[nodes]
+ose35.marcote.org  openshift_public_ip=192.168.1.53 openshift_ip=192.168.1.53 openshift_public_hostname=ose35.marcote.org openshift_hostname=ose35 connect_to=ose35.marcote.org openshift_schedulable=False ansible_connection=local
+ose35node1.marcote.org  openshift_public_ip=192.168.1.51 openshift_ip=192.168.1.51 openshift_public_hostname=ose35node1.marcote.org openshift_hostname=ose35node1 connect_to=ose35node1.marcote.org openshift_node_labels="{'region': 'infra'}" openshift_schedulable=True openshift_node_labels="{'router':'true','registry':'true'}"
+ose35node2.marcote.org  openshift_public_ip=192.168.1.52 openshift_ip=192.168.1.52 openshift_public_hostname=ose35node2.marcote.org openshift_hostname=ose35node2 connect_to=ose35node2.marcote.org openshift_node_labels="{'region': 'infra'}" openshift_schedulable=True
+
+[nfs]
+ose35.marcote.org  openshift_public_ip=192.168.1.53 openshift_ip=192.168.1.53 openshift_public_hostname=ose35.marcote.org openshift_hostname=ose35 connect_to=ose35.marcote.org ansible_connection=local
+
+[masters]
+ose35.marcote.org  openshift_public_ip=192.168.1.53 openshift_ip=192.168.1.53 openshift_public_hostname=ose35.marcote.org openshift_hostname=ose35 connect_to=ose35.marcote.org ansible_connection=local
+
+[etcd]
+ose35.marcote.org  openshift_public_ip=192.168.1.53 openshift_ip=192.168.1.53 openshift_public_hostname=ose35.marcote.org openshift_hostname=ose35 connect_to=ose35.marcote.org ansible_connection=local

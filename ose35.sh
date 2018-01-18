@@ -15,6 +15,9 @@ sudo docker-storage-setup
 sudo lvextend -l +100%FREE docker-vg/docker-pool
 sudo systemctl enable docker
 sudo systemctl start docker
-# Ensuring Host access
-
-
+# Ensure ssh host access
+# copy installer.cfg.yml config file
+sudo atomic-openshift-installer -u -c ose35-1master-2nodes.cfg.yml install
+# Verify installation
+sudo oc get nodes -o wide -L region
+sudo oc get pods -o wide

@@ -17,7 +17,7 @@ sudo systemctl enable docker
 sudo systemctl start docker
 # Ensure ssh host access
 # copy installer.cfg.yml config file
-sudo atomic-openshift-installer -u -c ose35-1master-2nodes.cfg.yml install
+sudo atomic-openshift-installer -u -c ocp35-1master-2nodes.cfg.yml install
 # Verify installation
 sudo oc get nodes -o wide -L region
 sudo oc get pods -o wide

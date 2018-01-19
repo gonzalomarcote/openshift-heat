@@ -1,5 +1,5 @@
 heat_template_version: 2015-10-15
-description: Launch a OpenShift cluster 3.7 with RHEL7
+description: Launch a OpenShift Container Platform cluster 3.5 with RHEL7
 
 parameters:
   INSTALL:
@@ -7,91 +7,92 @@ parameters:
     description: Quick or Advance installation
 
 resources:
-  ose37:
+  ocp35:
     type: OS::Nova::Server
     properties:
-      name: ose37
+      name: ocp35
       availability_zone: nova:node2.cbyg.marcote.org
       image: rhel7lvm
       flavor: osmaster
       key_name: osdefault
       networks:
-        - port: ...
-        - port: {get_resource: ose37_port}
-      personality: {/root/ose37.sh: {get_file: "./ose37.sh"}}
+        - port: 8607db68-20b7-4db5-ab1a-545c346ba9da
+        - port: {get_resource: ocp35_port}
+      personality: {"/home/cloud-user/ocp35.sh": {get_file: "/home/gonzalo/Development/openshift-heat/ocp35.sh"}}
+      personality: {"/root/.ssh/id_rsa": {get_file: "/home/gonzalo/.ssh/osdefault"}}
       user_data:
         str_replace:
           template: {get_file: lvm_metadata.sh}
           params:
             $FOO: {get_param: INSTALL}
 
-  ose37_port:
+  ocp35_port:
     type: OS::Neutron::Port
     properties:
       network: selfservice
       security_groups:
         - 74400bd4-ad90-47bd-923c-0723d517a228
-        - ssh-external
+        - ssh-internet
         - osmaster
 
-  ose37node1:
+  ocp35node1:
     type: OS::Nova::Server
     properties:
-      name: ose37node1
+      name: ocp35node1
       availability_zone: nova:node1.cbyg.marcote.org
       image: rhel7lvm
       flavor: osnode
       key_name: osdefault
       networks:
-        - port: ...
-        - port: {get_resource: ose37node1_port}
-      personality: {/root/ose37.sh: {get_file: "./ose37.sh"}}
+        - port: f52de966-4085-4289-98ed-af2ab549054c
+        - port: {get_resource: ocp35node1_port}
+      personality: {"/home/cloud-user/ocp35.sh": {get_file: "/home/gonzalo/Development/openshift-heat/ocp35.sh"}}
       user_data:
         str_replace:
           template: {get_file: lvm_metadata.sh}
           params:
             $FOO: {get_param: INSTALL}
 
-  ose37node1_port:
+  ocp35node1_port:
     type: OS::Neutron::Port
     properties:
       network: selfservice
       security_groups:
         - 74400bd4-ad90-47bd-923c-0723d517a228
-        - ssh-external
-        - osmaster
+        - ssh-internet
+        - osnode
 
-  ose37node2:
+  ocp35node2:
     type: OS::Nova::Server
     properties:
-      name: ose37node2
+      name: ocp35node2
       availability_zone: nova:node1.cbyg.marcote.org
       image: rhel7lvm
       flavor: osnode
       key_name: osdefault
       networks:
-      - port: ...
-      - port: {get_resource: ose37node2_port}
-      personality: {/root/ose37.sh: {get_file: "./ose37.sh"}}
+        - port: 0ab1aec8-6518-4e2f-8cb8-34ed2babc02d
+        - port: {get_resource: ocp35node2_port}
+      personality: {"/home/cloud-user/ocp35.sh": {get_file: "/home/gonzalo/Development/openshift-heat/ocp35.sh"}}
       user_data:
         str_replace:
           template: {get_file: lvm_metadata.sh}
           params:
             $VOL: docker-vg
 
-  ose37node2_port:
+  ocp35node2_port:
     type: OS::Neutron::Port
     properties:
       network: selfservice
       security_groups:
         - 74400bd4-ad90-47bd-923c-0723d517a228
-        - ssh-external
-        - osmaster
+        - ssh-internet
+        - osnode
 
 outputs:
   instance_name:
     description: Name of the instance.
-    value: { get_attr: [ ose37, name ] }
+    value: { get_attr: [ ocp35, name ] }
   instance_ip:
     description: IP address of the instance.
-    value: { get_attr: [ ose37, first_address ] }
+    value: { get_attr: [ ocp35, first_address ] }

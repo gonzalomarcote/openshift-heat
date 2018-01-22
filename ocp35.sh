@@ -15,8 +15,8 @@ sudo docker-storage-setup
 sudo lvextend -l +100%FREE docker-vg/docker-pool
 sudo systemctl enable docker
 sudo systemctl start docker
-# Ensure ssh host access
-# Copy installer.cfg.yml config file
+# Ensure ssh host access between master and hosts (done manually)
+# Copy installer.cfg.yml config file (done manually)
 sudo atomic-openshift-installer -u -c ocp35-1master-2nodes.cfg.yml install
 # Verify installation
 sudo oc get nodes -o wide -L region
@@ -25,7 +25,7 @@ sudo oc get pods -o wide
 sed -i.bak "s/DenyAllPasswordIdentityProvider/HTPasswdPasswordIdentityProvider\\n      file: \/etc\/origin\/openshift-passwd/g" /etc/origin/master/master-config.yaml
 touch /etc/origin/openshift-passwd
 systemctl restart atomic-openshift-master
-htpasswd -b /etc/origin/openshift-passwd gonzalo '1019goN$4'
-htpasswd -b /etc/origin/openshift-passwd admin '1019goN$44'
+htpasswd -b /etc/origin/openshift-passwd user 'password'
+htpasswd -b /etc/origin/openshift-passwd admin 'password'
 oc adm policy add-cluster-role-to-user cluster-admin admin
 

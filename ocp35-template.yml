@@ -2,9 +2,33 @@ heat_template_version: 2015-10-15
 description: Launch a OpenShift Container Platform cluster 3.5 with RHEL7
 
 parameters:
-  INSTALL:
+  PARTITION:
+    type: number
+    description: Execute partitioning in an extra partion in vda
+    default: "1"
+  USER:
     type: string
-    description: Quick or Advance installation
+    description: User to authenticate in RHEL subscription-manager
+  PASS:
+    type: string
+    description: Password to authenticate in RHEL subscription-manager
+  POOLID:
+    type: string
+    description: Execute partitioning in an extra partion in vda
+    default: "1"
+  VOL:
+    type: string
+    description: Name of the volume group
+    default: "docker-vg"
+  HTUSER:
+    type: string
+    description: Apache HTPasswd authentication regular user
+  HTPASS:
+    type: string
+    description: Apache HTPasswd authentication regular user password
+  HTADMINPASS:
+    type: string
+    description: Apache HTPasswd authentication admin user password
 
 resources:
   ocp35:
@@ -15,16 +39,23 @@ resources:
       image: rhel7lvm
       flavor: osmaster
       key_name: osdefault
+      personality: {/root/ocp35-cfg.yml: {get_file: /home/gonzalo/Development/openshift-heat/ocp35-cfg.yml}}
       networks:
         - port: 8607db68-20b7-4db5-ab1a-545c346ba9da
         - port: {get_resource: ocp35_port}
-      personality: {"/home/cloud-user/ocp35.sh": {get_file: "/home/gonzalo/Development/openshift-heat/ocp35.sh"}}
-      personality: {"/root/.ssh/id_rsa": {get_file: "/home/gonzalo/.ssh/osdefault"}}
       user_data:
         str_replace:
-          template: {get_file: lvm_metadata.sh}
+          template: {get_file: ocp35-master-install.sh}
           params:
-            $FOO: {get_param: INSTALL}
+            $PARTITION: {get_param: PARTITION}
+            $USER: {get_param: USER}
+            $PASS: {get_param: PASS}
+            $POOLID: {get_param: POOLID}
+            $VOL: {get_param: VOL}
+            $HTUSER: {get_param: HTUSER}
+            $HTPASS: {get_param: HTPASS}
+            $HTADMINPASS: {get_param: HTADMINPASS}
+            $CONFIG: {get_file: ocp35-cfg.yml}
 
   ocp35_port:
     type: OS::Neutron::Port
@@ -42,16 +73,20 @@ resources:
       availability_zone: nova:node1.cbyg.marcote.org
       image: rhel7lvm
       flavor: osnode
+      personality: {/root/ocp35-cfg.yml: {get_file: /home/gonzalo/Development/openshift-heat/ocp35-cfg.yml}}
       key_name: osdefault
       networks:
         - port: f52de966-4085-4289-98ed-af2ab549054c
         - port: {get_resource: ocp35node1_port}
-      personality: {"/home/cloud-user/ocp35.sh": {get_file: "/home/gonzalo/Development/openshift-heat/ocp35.sh"}}
       user_data:
         str_replace:
-          template: {get_file: lvm_metadata.sh}
+          template: {get_file: ocp35-node-install.sh}
           params:
-            $FOO: {get_param: INSTALL}
+            $PARTITION: {get_param: PARTITION}
+            $USER: {get_param: USER}
+            $PASS: {get_param: PASS}
+            $POOLID: {get_param: POOLID}
+            $VOL: {get_param: VOL}
 
   ocp35node1_port:
     type: OS::Neutron::Port
@@ -69,16 +104,20 @@ resources:
       availability_zone: nova:node1.cbyg.marcote.org
       image: rhel7lvm
       flavor: osnode
+      personality: {/root/ocp35-cfg.yml: {get_file: /home/gonzalo/Development/openshift-heat/ocp35-cfg.yml}}
       key_name: osdefault
       networks:
         - port: 0ab1aec8-6518-4e2f-8cb8-34ed2babc02d
         - port: {get_resource: ocp35node2_port}
-      personality: {"/home/cloud-user/ocp35.sh": {get_file: "/home/gonzalo/Development/openshift-heat/ocp35.sh"}}
       user_data:
         str_replace:
-          template: {get_file: lvm_metadata.sh}
+          template: {get_file: ocp35-node-install.sh}
           params:
-            $VOL: docker-vg
+            $PARTITION: {get_param: PARTITION}
+            $USER: {get_param: USER}
+            $PASS: {get_param: PASS}
+            $POOLID: {get_param: POOLID}
+            $VOL: {get_param: VOL}
 
   ocp35node2_port:
     type: OS::Neutron::Port

@@ -1,8 +1,9 @@
-ansible_callback_facts_yaml: /root/.config/openshift/.ansible/callback_facts.yaml
-ansible_inventory_path: /root/.config/openshift/hosts
+version: v2
+variant: openshift-enterprise
+variant_version: 3.5
 ansible_log_path: /tmp/ansible.log
 deployment:
-  ansible_ssh_user: cloud-user
+  ansible_ssh_user: root
   hosts:
   - connect_to: ocp35.marcote.org
     hostname: ocp35.marcote.org

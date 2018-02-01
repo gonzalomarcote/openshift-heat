@@ -1,0 +1,724 @@
+ocp35.marcote.org:
+  builddefaults:
+    config:
+      BuildDefaults:
+        configuration:
+          apiVersion: v1
+          env: []
+          kind: BuildDefaultsConfig
+          resources:
+            limits: {}
+            requests: {}
+  buildoverrides:
+    config:
+      BuildOverrides:
+        configuration:
+          apiVersion: v1
+          kind: BuildOverridesConfig
+  clock:
+    chrony_installed: true
+    enabled: true
+  cloudprovider:
+    kind: null
+  common:
+    admin_binary: oadm
+    all_hostnames:
+    - kubernetes.default
+    - kubernetes.default.svc.cluster.local
+    - kubernetes
+    - ocp35
+    - openshift.default
+    - openshift.default.svc
+    - 172.30.0.1
+    - 192.168.1.53
+    - openshift.default.svc.cluster.local
+    - kubernetes.default.svc
+    - openshift
+    cli_image: openshift3/ose
+    client_binary: oc
+    cluster_id: default
+    config_base: /etc/origin
+    data_dir: /var/lib/origin
+    debug_level: '2'
+    deployer_image: openshift3/ose-deployer
+    deployment_subtype: basic
+    deployment_type: openshift-enterprise
+    dns_domain: cluster.local
+    examples_content_version: v1.5
+    generate_no_proxy_hosts: true
+    hostname: ocp35
+    install_examples: true
+    installed_variant_rpms:
+    - atomic-openshift
+    - atomic-openshift-master
+    - atomic-openshift-node
+    - atomic-openshift-clients
+    - atomic-openshift-sdn-ovs
+    - tuned-profiles-atomic-openshift-node
+    internal_hostnames:
+    - kubernetes.default
+    - kubernetes.default.svc.cluster.local
+    - kubernetes
+    - ocp35
+    - openshift.default
+    - openshift.default.svc
+    - 172.30.0.1
+    - 192.168.1.53
+    - openshift.default.svc.cluster.local
+    - kubernetes.default.svc
+    - openshift
+    ip: 192.168.1.53
+    is_atomic: false
+    is_containerized: false
+    is_etcd_system_container: false
+    is_master_system_container: false
+    is_node_system_container: false
+    is_openvswitch_system_container: false
+    kube_svc_ip: 172.30.0.1
+    pod_image: openshift3/ose-pod
+    portal_net: 172.30.0.0/16
+    public_hostname: ocp35
+    public_ip: 192.168.1.53
+    registry_image: openshift3/ose-docker-registry
+    router_image: openshift3/ose-haproxy-router
+    sdn_network_plugin_name: redhat/openshift-ovs-subnet
+    service_type: atomic-openshift
+    short_version: '3.5'
+    use_contiv: false
+    use_dnsmasq: true
+    use_flannel: false
+    use_manageiq: true
+    use_nuage: false
+    use_openshift_sdn: true
+    version: 3.5.5.31.48
+    version_gte_3_1_1_or_1_1_1: true
+    version_gte_3_1_or_1_1: true
+    version_gte_3_2_or_1_2: true
+    version_gte_3_3_or_1_3: true
+    version_gte_3_4_or_1_4: true
+    version_gte_3_5_or_1_5: true
+    version_gte_3_6: false
+  current_config:
+    roles:
+    - node
+    - builddefaults
+    - cloudprovider
+    - clock
+    - hosted
+    - master
+    - etcd
+    - docker
+    - buildoverrides
+  docker:
+    additional_registries:
+    - registry.access.redhat.com
+    api_version: 1.24
+    blocked_registries: []
+    disable_push_dockerhub: false
+    gte_1_10: true
+    hosted_registry_insecure: false
+    hosted_registry_network: 172.30.0.0/16
+    insecure_registries: []
+    options: --log-driver=journald
+    use_system_container: false
+    version: 1.12.6
+  etcd:
+    etcd_data_dir: /var/lib/etcd/
+    etcd_image: registry.access.redhat.com/rhel7/etcd
+  hosted:
+    logging:
+      selector: null
+      storage:
+        access:
+          modes:
+          - ReadWriteOnce
+        create_pv: true
+        create_pvc: false
+        host: null
+        kind: null
+        nfs:
+          directory: /exports
+          options: '*(rw,root_squash)'
+        volume:
+          name: logging-es
+          size: 10Gi
+    loggingops:
+      storage:
+        access:
+          modes:
+          - ReadWriteOnce
+        create_pv: true
+        create_pvc: false
+        host: null
+        kind: null
+        nfs:
+          directory: /exports
+          options: '*(rw,root_squash)'
+        volume:
+          name: logging-es-ops
+          size: 10Gi
+    metrics:
+      deploy: false
+      duration: 7
+      resolution: 10s
+      selector: null
+      storage:
+        access:
+          modes:
+          - ReadWriteOnce
+        create_pv: true
+        create_pvc: false
+        host: null
+        kind: null
+        nfs:
+          directory: /exports
+          options: '*(rw,root_squash)'
+        volume:
+          name: metrics
+          size: 10Gi
+    registry:
+      cert:
+        expire:
+          days: 730
+      registryurl: openshift3/ose-${component}:${version}
+      selector: region=infra
+      storage:
+        access:
+          modes:
+          - ReadWriteMany
+        create_pv: true
+        create_pvc: true
+        host: null
+        kind: null
+        nfs:
+          directory: /exports
+          options: '*(rw,root_squash)'
+        volume:
+          name: registry
+          size: 5Gi
+    router:
+      certificate: {}
+      create_certificate: false
+      edits:
+      - action: put
+        key: spec.strategy.rollingParams.intervalSeconds
+        value: 1
+      - action: put
+        key: spec.strategy.rollingParams.updatePeriodSeconds
+        value: 1
+      - action: put
+        key: spec.strategy.activeDeadlineSeconds
+        value: 21600
+      registryurl: openshift3/ose-${component}:${version}
+      selector: region=infra
+    routers:
+    - certificate: '{{ openshift_hosted_router_certificate | default({}) }}'
+      edits: '{{ openshift_hosted_router_edits }}'
+      images: '{{ openshift_hosted_router_image | default(None)  }}'
+      name: router
+      namespace: default
+      ports:
+      - 80:80
+      - 443:443
+      replicas: '{{ replicas | default(1) }}'
+      selector: '{{ openshift_hosted_router_selector | default(None) }}'
+      serviceaccount: router
+      stats_port: 1936
+    templates:
+      kubeconfig: /tmp/openshift-ansible-wvQ4lM/admin.kubeconfig
+  master:
+    access_token_max_seconds: 86400
+    admission_plugin_config:
+      BuildDefaults:
+        configuration:
+          apiVersion: v1
+          env: []
+          kind: BuildDefaultsConfig
+          resources:
+            limits: {}
+            requests: {}
+      BuildOverrides:
+        configuration:
+          apiVersion: v1
+          kind: BuildOverridesConfig
+      openshift.io/ImagePolicy:
+        configuration:
+          apiVersion: v1
+          executionRules:
+          - matchImageAnnotations:
+            - key: images.openshift.io/deny-execution
+              value: 'true'
+            name: execution-denied
+            onResources:
+            - resource: pods
+            - resource: builds
+            reject: true
+            skipOnResolutionFailure: true
+          kind: ImagePolicyConfig
+    api_port: '8443'
+    api_url: https://ocp35:8443
+    api_use_ssl: true
+    auth_token_max_seconds: 500
+    bind_addr: 0.0.0.0
+    console_path: /console
+    console_port: '8443'
+    console_url: https://ocp35:8443/console
+    console_use_ssl: true
+    controllers_port: '8444'
+    debug_level: '2'
+    default_node_selector: ''
+    dns_port: 8053
+    dynamic_provisioning_enabled: true
+    embedded_dns: true
+    embedded_etcd: false
+    embedded_kube: true
+    etcd_hosts:
+    - ocp35
+    etcd_port: '2379'
+    etcd_urls:
+    - https://ocp35:2379
+    etcd_use_ssl: true
+    ha: false
+    identity_providers:
+    - challenge: true
+      kind: DenyAllPasswordIdentityProvider
+      login: true
+      name: deny_all
+    loopback_api_url: https://ocp35:8443
+    loopback_cluster_name: ocp35:8443
+    loopback_context_name: default/ocp35:8443/system:openshift-master
+    loopback_user: system:openshift-master/ocp35:8443
+    manage_htpasswd: true
+    master_count: '1'
+    master_image: openshift3/ose
+    master_system_image: openshift3/ose
+    max_requests_inflight: 500
+    mcs_allocator_range: s0:/2
+    mcs_labels_per_project: 5
+    named_certificates: []
+    oauth_grant_method: auto
+    portal_net: 172.30.0.0/16
+    project_request_message: ''
+    project_request_template: ''
+    public_api_url: https://ocp35:8443
+    public_console_url: https://ocp35:8443/console
+    registry_url: openshift3/ose-${component}:${version}
+    sdn_cluster_network_cidr: 10.128.0.0/14
+    sdn_host_subnet_length: 9
+    session_auth_secrets:
+    - 2/WZdnpkRmVQuQGNlhkUu/7NbKl63PoP
+    session_encryption_secrets:
+    - 2/WZdnpkRmVQuQGNlhkUu/7NbKl63PoP
+    session_max_seconds: 3600
+    session_name: ssn
+    session_secrets_file: /etc/origin/master/session-secrets.yaml
+    uid_allocator_range: 1000000000-1999999999/10000
+  node:
+    annotations: {}
+    debug_level: '2'
+    dns_ip: 192.168.1.53
+    iptables_sync_period: 30s
+    kubelet_args:
+      node-labels: []
+    labels: {}
+    local_quota_per_fsgroup: ''
+    node_image: openshift3/node
+    node_system_image: openshift3/node
+    nodename: ocp35
+    ovs_image: openshift3/openvswitch
+    ovs_system_image: openshift3/openvswitch
+    proxy_mode: iptables
+    registry_url: openshift3/ose-${component}:${version}
+    schedulable: false
+    sdn_mtu: '1450'
+    set_node_ip: false
+    storage_plugin_deps:
+    - ceph
+    - glusterfs
+    - iscsi
+  provider:
+    metadata:
+      availability_zone: nova
+      devices: []
+      ec2_compat:
+        ami-id: ami-00000010
+        ami-launch-index: '0'
+        ami-manifest-path: FIXME
+        block-device-mapping:
+          ami: vda
+          root: /dev/vda
+          swap: /dev/vdb
+        hostname: ocp35
+        instance-action: none
+        instance-id: i-000000e7
+        instance-type: osmaster
+        local-hostname: ocp35
+        local-ipv4: 192.168.1.53
+        placement:
+          availability-zone: nova
+        public-hostname: ocp35
+        public-ipv4: []
+        public-keys/: 0=osdefault
+        reservation-id: r-zn9q9y27
+        security-groups:
+        - ssh-internet
+        - default
+        - osmaster
+        - ssh-internet
+        - default
+        - osmaster
+      hostname: ocp35
+      keys:
+      - data: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC76LVQRF6+6PMUnPSJqOxhLEba3v6RKAW2dDjlLmTleAtKAXvxxeeO0YhDZRCQNtT/WYkwzS2HJ39PQ1UG9AD3eusuBu/BXYLDuqbv8kUTUCEWEODQztw0YpSNrcjBgitkX5SF4AZHxmDoT7ESn3UHib7oR2GSNMzqZcxNv7y2Foadsdv/lRX14j/0kgmJO5n0A5tI6Jes+gOikr6uI08ghqMzCZePefcsIIycsQ1AvzdnW9iQCkGjeduE730NTmQ8lFOs9ksr0TDmWuSh/VLrmnGfO3nu0iJBLfthtABcg4gJF05SZWxxd/82ZOkigFpd4DpfyU+qwhKffS9GQKAh
+          Generated-by-Nova
+        name: osdefault
+        type: ssh
+      launch_index: 0
+      name: ocp35
+      project_id: 13d14265860a45b6beb53f5439c1fd4e
+      uuid: ff42fee0-d4f9-42c8-b8fd-e86f8a098695
+    name: openstack
+    network:
+      hostname: ocp35
+      interfaces: []
+      ip: 192.168.1.53
+      ipv6_enabled: false
+      public_hostname: []
+      public_ip: []
+    zone: nova
+ocp35node1.marcote.org:
+  clock:
+    chrony_installed: true
+    enabled: true
+  cloudprovider:
+    kind: null
+  common:
+    admin_binary: oadm
+    all_hostnames:
+    - ocp35node1
+    - 192.168.1.51
+    cli_image: openshift3/ose
+    client_binary: oc
+    cluster_id: default
+    config_base: /etc/origin
+    data_dir: /var/lib/origin
+    debug_level: '2'
+    deployer_image: openshift3/ose-deployer
+    deployment_subtype: basic
+    deployment_type: openshift-enterprise
+    dns_domain: cluster.local
+    examples_content_version: v1.5
+    generate_no_proxy_hosts: true
+    hostname: ocp35node1
+    install_examples: true
+    installed_variant_rpms:
+    - atomic-openshift
+    - atomic-openshift-node
+    - atomic-openshift-clients
+    - atomic-openshift-sdn-ovs
+    - tuned-profiles-atomic-openshift-node
+    internal_hostnames:
+    - ocp35node1
+    - 192.168.1.51
+    ip: 192.168.1.51
+    is_atomic: false
+    is_containerized: false
+    is_etcd_system_container: false
+    is_master_system_container: false
+    is_node_system_container: false
+    is_openvswitch_system_container: false
+    kube_svc_ip: 172.30.0.1
+    pod_image: openshift3/ose-pod
+    portal_net: 172.30.0.0/16
+    public_hostname: ocp35node1
+    public_ip: 192.168.1.51
+    registry_image: openshift3/ose-docker-registry
+    router_image: openshift3/ose-haproxy-router
+    sdn_network_plugin_name: redhat/openshift-ovs-subnet
+    service_type: atomic-openshift
+    short_version: '3.5'
+    use_contiv: false
+    use_dnsmasq: true
+    use_flannel: false
+    use_manageiq: true
+    use_nuage: false
+    use_openshift_sdn: true
+    version: 3.5.5.31.48
+    version_gte_3_1_1_or_1_1_1: true
+    version_gte_3_1_or_1_1: true
+    version_gte_3_2_or_1_2: true
+    version_gte_3_3_or_1_3: true
+    version_gte_3_4_or_1_4: true
+    version_gte_3_5_or_1_5: true
+    version_gte_3_6: false
+  current_config:
+    roles:
+    - node
+    - cloudprovider
+    - clock
+    - docker
+  docker:
+    additional_registries:
+    - registry.access.redhat.com
+    api_version: 1.24
+    blocked_registries: []
+    disable_push_dockerhub: false
+    gte_1_10: true
+    hosted_registry_insecure: false
+    hosted_registry_network: 172.30.0.0/16
+    insecure_registries: []
+    options: --log-driver=journald
+    use_system_container: false
+    version: 1.12.6
+  hosted:
+    logging:
+      selector: null
+    metrics:
+      selector: null
+    registry:
+      selector: region=infra
+    router:
+      selector: region=infra
+  node:
+    annotations: {}
+    debug_level: '2'
+    dns_ip: 192.168.1.51
+    iptables_sync_period: 30s
+    kubelet_args:
+      node-labels:
+      - region=infra
+    labels:
+      region: infra
+    local_quota_per_fsgroup: ''
+    node_image: openshift3/node
+    node_system_image: openshift3/node
+    nodename: ocp35node1
+    ovs_image: openshift3/openvswitch
+    ovs_system_image: openshift3/openvswitch
+    proxy_mode: iptables
+    registry_url: openshift3/ose-${component}:${version}
+    schedulable: true
+    sdn_mtu: '1450'
+    set_node_ip: false
+    storage_plugin_deps:
+    - ceph
+    - glusterfs
+    - iscsi
+  provider:
+    metadata:
+      availability_zone: nova
+      devices: []
+      ec2_compat:
+        ami-id: ami-00000010
+        ami-launch-index: '0'
+        ami-manifest-path: FIXME
+        block-device-mapping:
+          ami: vda
+          root: /dev/vda
+          swap: /dev/vdb
+        hostname: ocp35node1
+        instance-action: none
+        instance-id: i-000000e6
+        instance-type: osnode
+        local-hostname: ocp35node1
+        local-ipv4: 192.168.1.51
+        placement:
+          availability-zone: nova
+        public-hostname: ocp35node1
+        public-ipv4: []
+        public-keys/: 0=osdefault
+        reservation-id: r-hcszpfho
+        security-groups:
+        - osnode
+        - ssh-internet
+        - default
+        - osnode
+        - ssh-internet
+        - default
+      hostname: ocp35node1
+      keys:
+      - data: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC76LVQRF6+6PMUnPSJqOxhLEba3v6RKAW2dDjlLmTleAtKAXvxxeeO0YhDZRCQNtT/WYkwzS2HJ39PQ1UG9AD3eusuBu/BXYLDuqbv8kUTUCEWEODQztw0YpSNrcjBgitkX5SF4AZHxmDoT7ESn3UHib7oR2GSNMzqZcxNv7y2Foadsdv/lRX14j/0kgmJO5n0A5tI6Jes+gOikr6uI08ghqMzCZePefcsIIycsQ1AvzdnW9iQCkGjeduE730NTmQ8lFOs9ksr0TDmWuSh/VLrmnGfO3nu0iJBLfthtABcg4gJF05SZWxxd/82ZOkigFpd4DpfyU+qwhKffS9GQKAh
+          Generated-by-Nova
+        name: osdefault
+        type: ssh
+      launch_index: 0
+      name: ocp35node1
+      project_id: 13d14265860a45b6beb53f5439c1fd4e
+      uuid: 32f25a74-cc0d-46b7-910c-7b32b74b35a6
+    name: openstack
+    network:
+      hostname: ocp35node1
+      interfaces: []
+      ip: 192.168.1.51
+      ipv6_enabled: false
+      public_hostname: []
+      public_ip: []
+    zone: nova
+ocp35node2.marcote.org:
+  clock:
+    chrony_installed: true
+    enabled: true
+  cloudprovider:
+    kind: null
+  common:
+    admin_binary: oadm
+    all_hostnames:
+    - ocp35node2
+    - 192.168.1.52
+    cli_image: openshift3/ose
+    client_binary: oc
+    cluster_id: default
+    config_base: /etc/origin
+    data_dir: /var/lib/origin
+    debug_level: '2'
+    deployer_image: openshift3/ose-deployer
+    deployment_subtype: basic
+    deployment_type: openshift-enterprise
+    dns_domain: cluster.local
+    examples_content_version: v1.5
+    generate_no_proxy_hosts: true
+    hostname: ocp35node2
+    install_examples: true
+    installed_variant_rpms:
+    - atomic-openshift
+    - atomic-openshift-node
+    - atomic-openshift-clients
+    - atomic-openshift-sdn-ovs
+    - tuned-profiles-atomic-openshift-node
+    internal_hostnames:
+    - ocp35node2
+    - 192.168.1.52
+    ip: 192.168.1.52
+    is_atomic: false
+    is_containerized: false
+    is_etcd_system_container: false
+    is_master_system_container: false
+    is_node_system_container: false
+    is_openvswitch_system_container: false
+    kube_svc_ip: 172.30.0.1
+    pod_image: openshift3/ose-pod
+    portal_net: 172.30.0.0/16
+    public_hostname: ocp35node2
+    public_ip: 192.168.1.52
+    registry_image: openshift3/ose-docker-registry
+    router_image: openshift3/ose-haproxy-router
+    sdn_network_plugin_name: redhat/openshift-ovs-subnet
+    service_type: atomic-openshift
+    short_version: '3.5'
+    use_contiv: false
+    use_dnsmasq: true
+    use_flannel: false
+    use_manageiq: true
+    use_nuage: false
+    use_openshift_sdn: true
+    version: 3.5.5.31.48
+    version_gte_3_1_1_or_1_1_1: true
+    version_gte_3_1_or_1_1: true
+    version_gte_3_2_or_1_2: true
+    version_gte_3_3_or_1_3: true
+    version_gte_3_4_or_1_4: true
+    version_gte_3_5_or_1_5: true
+    version_gte_3_6: false
+  current_config:
+    roles:
+    - node
+    - cloudprovider
+    - clock
+    - docker
+  docker:
+    additional_registries:
+    - registry.access.redhat.com
+    api_version: 1.24
+    blocked_registries: []
+    disable_push_dockerhub: false
+    gte_1_10: true
+    hosted_registry_insecure: false
+    hosted_registry_network: 172.30.0.0/16
+    insecure_registries: []
+    options: --log-driver=journald
+    use_system_container: false
+    version: 1.12.6
+  hosted:
+    logging:
+      selector: null
+    metrics:
+      selector: null
+    registry:
+      selector: region=infra
+    router:
+      selector: region=infra
+  node:
+    annotations: {}
+    debug_level: '2'
+    dns_ip: 192.168.1.52
+    iptables_sync_period: 30s
+    kubelet_args:
+      node-labels:
+      - region=infra
+    labels:
+      region: infra
+    local_quota_per_fsgroup: ''
+    node_image: openshift3/node
+    node_system_image: openshift3/node
+    nodename: ocp35node2
+    ovs_image: openshift3/openvswitch
+    ovs_system_image: openshift3/openvswitch
+    proxy_mode: iptables
+    registry_url: openshift3/ose-${component}:${version}
+    schedulable: true
+    sdn_mtu: '1450'
+    set_node_ip: false
+    storage_plugin_deps:
+    - ceph
+    - glusterfs
+    - iscsi
+  provider:
+    metadata:
+      availability_zone: nova
+      devices: []
+      ec2_compat:
+        ami-id: ami-00000010
+        ami-launch-index: '0'
+        ami-manifest-path: FIXME
+        block-device-mapping:
+          ami: vda
+          root: /dev/vda
+          swap: /dev/vdb
+        hostname: ocp35node2
+        instance-action: none
+        instance-id: i-000000e5
+        instance-type: osnode
+        local-hostname: ocp35node2
+        local-ipv4: 192.168.1.52
+        placement:
+          availability-zone: nova
+        public-hostname: ocp35node2
+        public-ipv4: []
+        public-keys/: 0=osdefault
+        reservation-id: r-t5i2yjos
+        security-groups:
+        - osnode
+        - ssh-internet
+        - default
+        - osnode
+        - ssh-internet
+        - default
+      hostname: ocp35node2
+      keys:
+      - data: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC76LVQRF6+6PMUnPSJqOxhLEba3v6RKAW2dDjlLmTleAtKAXvxxeeO0YhDZRCQNtT/WYkwzS2HJ39PQ1UG9AD3eusuBu/BXYLDuqbv8kUTUCEWEODQztw0YpSNrcjBgitkX5SF4AZHxmDoT7ESn3UHib7oR2GSNMzqZcxNv7y2Foadsdv/lRX14j/0kgmJO5n0A5tI6Jes+gOikr6uI08ghqMzCZePefcsIIycsQ1AvzdnW9iQCkGjeduE730NTmQ8lFOs9ksr0TDmWuSh/VLrmnGfO3nu0iJBLfthtABcg4gJF05SZWxxd/82ZOkigFpd4DpfyU+qwhKffS9GQKAh
+          Generated-by-Nova
+        name: osdefault
+        type: ssh
+      launch_index: 0
+      name: ocp35node2
+      project_id: 13d14265860a45b6beb53f5439c1fd4e
+      uuid: 2487d736-acb8-438e-bde3-877c416b32b0
+    name: openstack
+    network:
+      hostname: ocp35node2
+      interfaces: []
+      ip: 192.168.1.52
+      ipv6_enabled: false
+      public_hostname: []
+      public_ip: []
+    zone: nova

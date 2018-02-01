@@ -12,7 +12,7 @@ Disclaimer: For my own use. Modify it to your own usage (GNU GPL License).
 #### Usage
 Required packages: openstack client with Heat support
 
-Just edit openshift-template.yml and fill with your own variables:
+Just edit ocp3X-template.yml and fill with your own variables:
 
 	image: -> your image name
 	favor: -> your flavor
@@ -20,12 +20,16 @@ Just edit openshift-template.yml and fill with your own variables:
 
 Run the stack with these commands:
 
-`$ export NET_ID=$(openstack network list | awk '/ provider / { print $2 }')`
+`$ export INSTALL=quick`
 
-`$ openstack stack create -t openshift-template.yml --parameter "NetID=$NET_ID" openshift-stack`
+`$ openstack stack create --wait -t ocp35-template.yml --parameter 'PARTITION=1' --parameter 'USER=rhn-support-gmarcote' --parameter 'PASS=1019goN\$4' --parameter 'POOLID=8a85f9813cf493fe013d028b6cf75b5a' --parameter 'VOL=docker-vg' --parameter 'HTUSER=gonzalo' --parameter 'HTPASS=1019goN\$4' --parameter 'HTADMINPASS=1019goN\$44'n ocp35-stack`
+
+`$ openstack stack create -t ocp3X-template.yml --parameter "PARTITION=1" --parameter "USER=rhn-support-gmarcote" --parameter "PASS=1019goN\$4" --parameter "POOLID=8a85f9813cf493fe013d028b6cf75b5a" --parameter "VOL=docker-vg" --parameter "HTUSER=gonzalo" --parameter "HTPASS=1019goN\$4" --parameter "HTADMINPASS=1019goN\$44" --parameter "CONFIG=ocp35-1master-2nodes.cfg.yml" ocp3X-stack`
 
 `$ openstack stack list`
 
 `$ openstack server list`
 
-`$ openstack stack delete --yes openshift-stack`
+`$ openstack stack output show --all ocp3X-stack`
+
+`$ openstack stack delete --yes ocp3X-stack`

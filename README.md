@@ -22,9 +22,7 @@ Run the stack with these commands:
 
 `$ export INSTALL=quick`
 
-`$ openstack stack create --wait -t ocp35-template.yml --parameter 'PARTITION=1' --parameter 'USER=rhn-support-gmarcote' --parameter 'PASS=1019goN\$4' --parameter 'POOLID=8a85f9813cf493fe013d028b6cf75b5a' --parameter 'VOL=docker-vg' --parameter 'HTUSER=gonzalo' --parameter 'HTPASS=1019goN\$4' --parameter 'HTADMINPASS=1019goN\$44'n ocp35-stack`
-
-`$ openstack stack create -t ocp3X-template.yml --parameter "PARTITION=1" --parameter "USER=rhn-support-gmarcote" --parameter "PASS=1019goN\$4" --parameter "POOLID=8a85f9813cf493fe013d028b6cf75b5a" --parameter "VOL=docker-vg" --parameter "HTUSER=gonzalo" --parameter "HTPASS=1019goN\$4" --parameter "HTADMINPASS=1019goN\$44" --parameter "CONFIG=ocp35-1master-2nodes.cfg.yml" ocp3X-stack`
+`$ openstack stack create --wait -t ocp35-template.yml --parameter 'PARTITION=1' --parameter 'USER=rhn-support-xxxx' --parameter 'PASS=xxx' --parameter 'POOLID=xxxx' --parameter 'VOL=docker-vg' --parameter 'HTUSER=gonzalo' --parameter 'HTPASS=xxxx' --parameter 'HTADMINPASS=xxx' ocp35-stack`
 
 `$ openstack stack list`
 

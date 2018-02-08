@@ -34,7 +34,7 @@ resources:
   ocp35:
     type: OS::Nova::Server
     properties:
-      name: ocp35
+      name: ocp35.marcote.org
       availability_zone: nova:node2.cbyg.marcote.org
       image: rhel7lvm
       flavor: osmaster
@@ -69,18 +69,17 @@ resources:
   ocp35node1:
     type: OS::Nova::Server
     properties:
-      name: ocp35node1
+      name: ocp35node1.marcote.org
       availability_zone: nova:node1.cbyg.marcote.org
       image: rhel7lvm
       flavor: osnode
-      personality: {/root/ocp35-cfg.yml: {get_file: /home/gonzalo/Development/openshift-heat/ocp35-cfg.yml}}
       key_name: osdefault
       networks:
         - port: f52de966-4085-4289-98ed-af2ab549054c
         - port: {get_resource: ocp35node1_port}
       user_data:
         str_replace:
-          template: {get_file: ocp35-node-install.sh}
+          template: {get_file: ocp35-node1-install.sh}
           params:
             $PARTITION: {get_param: PARTITION}
             $USER: {get_param: USER}
@@ -100,18 +99,17 @@ resources:
   ocp35node2:
     type: OS::Nova::Server
     properties:
-      name: ocp35node2
+      name: ocp35node2.marcote.org
       availability_zone: nova:node1.cbyg.marcote.org
       image: rhel7lvm
       flavor: osnode
-      personality: {/root/ocp35-cfg.yml: {get_file: /home/gonzalo/Development/openshift-heat/ocp35-cfg.yml}}
       key_name: osdefault
       networks:
         - port: 0ab1aec8-6518-4e2f-8cb8-34ed2babc02d
         - port: {get_resource: ocp35node2_port}
       user_data:
         str_replace:
-          template: {get_file: ocp35-node-install.sh}
+          template: {get_file: ocp35-node2-install.sh}
           params:
             $PARTITION: {get_param: PARTITION}
             $USER: {get_param: USER}

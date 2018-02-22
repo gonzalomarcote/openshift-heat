@@ -32,7 +32,7 @@ fi
 sed -i 's/.*10" //g' /root/.ssh/authorized_keys
 #subscription-manager register --username=$USER --password=$PASS
 #subscription-manager attach --pool=$POOLID
-subscription-manager repos --enable="rhel-7-server-rpms" --enable="rhel-7-server-extras-rpms" --enable="rhel-7-server-ose-3.5-rpms" --enable="rhel-7-fast-datapath-rpms"
+subscription-manager repos --enable="rhel-7-server-rpms" --enable="rhel-7-server-extras-rpms" --enable="rhel-7-server-updates-rpms" --enable="rhel-7-server-ose-3.5-rpms" --enable="rhel-7-fast-datapath-rpms"
 yum -y update
 yum -y install wget git net-tools bind-utils iptables-services bridge-utils bash-completion kexec-tools sos psacct vim httpd-tools
 yum -y install atomic-openshift-utils

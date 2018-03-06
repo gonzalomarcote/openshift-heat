@@ -1,0 +1,44 @@
+ansible_log_path: /tmp/ansible.log
+deployment:
+  ansible_ssh_user: root
+  hosts:
+  - connect_to: ocp35.marcote.org
+    hostname: ocp35.marcote.org
+    ip: 192.168.1.53
+    public_hostname: ocp35.marcote.org
+    public_ip: 192.168.1.53
+    roles:
+    - master
+    - etcd
+    - node
+    - storage
+  - connect_to: ocp35node1.marcote.org
+    hostname: ocp35node1.marcote.org
+    ip: 192.168.1.51
+    node_labels: '{''region'': ''infra''}'
+    public_hostname: ocp35node1.marcote.org
+    public_ip: 192.168.1.51
+    roles:
+    - node
+  - connect_to: ocp35node2.marcote.org
+    hostname: ocp35node2.marcote.org
+    ip: 192.168.1.52
+    node_labels: '{''region'': ''infra''}'
+    public_hostname: ocp35node2.marcote.org
+    public_ip: 192.168.1.52
+    roles:
+    - node
+  master_routingconfig_subdomain: ocp35apps.marcote.org
+  openshift_master_cluster_hostname: None
+  openshift_master_cluster_public_hostname: None
+  proxy_exclude_hosts: ''
+  proxy_http: ''
+  proxy_https: ''
+  roles:
+    etcd: {}
+    master: {}
+    node: {}
+    storage: {}
+variant: openshift-enterprise
+variant_version: '3.5'
+version: v2
